@@ -44,7 +44,7 @@ if __name__ == "__main__":
         while ( True ):
             packet      = headset.dequeue()
 
-            if (second % (measure_time + idle_time) >= measure_time ) :
+            if (second % (measure_time + idle_time) <= (measure_time - 1) ) :
                 data['second'].append(second)
                 data['counter'].append(packet.counter)
                 data['F3'].append(packet.F3[0])
