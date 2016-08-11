@@ -12,16 +12,6 @@ idle_time       = 1
 measure_time    = 2
 sampling_rate   = 128
 
-try :
-    name    = sys.argv[1]
-except:
-    name    = 'unnamed'
-
-try :
-    maxtime = int(sys.argv[2])
-except:
-    maxtime = 10
-
 if __name__ == "__main__":
     # headset = Emotiv(display_output=False)
     headset     = Emotiv()
@@ -51,11 +41,11 @@ if __name__ == "__main__":
     second      = 0
     iterate     = 0
     try:
-        while ( true ):
+        while ( True ):
             packet      = headset.dequeue()
 
             if (second % (measure_time + idle_time) >= measure_time ) :
-                data['second'].append(time_now)
+                data['second'].append(second)
                 data['counter'].append(packet.counter)
                 data['F3'].append(packet.F3[0])
                 data['FC5'].append(packet.FC5[0])
