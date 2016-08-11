@@ -12,31 +12,16 @@ idle_time       = 1
 measure_time    = 2
 sampling_rate   = 128
 
+def initBuffer() :
+    return {'second' : [], 'counter' : [], 'F3' : [], 'FC5' : [], 'AF3' : [], 'F7' : [], 'T7' : [], 'P7' : [], 'O1' : [], 'O2' : [], 'P8' : [], 'T8' : [], 'F8' : [], 'AF4' : [], 'FC6' : [], 'F4' : []}
+
 if __name__ == "__main__":
     # headset = Emotiv(display_output=False)
     headset     = Emotiv()
     gevent.spawn(headset.setup)
     gevent.sleep(0)
 
-    data        = {
-        'second'    : [],
-        'counter'   : [],
-        'F3'        : [],
-        'FC5'       : [],
-        'AF3'       : [],
-        'F7'        : [],
-        'T7'        : [],
-        'P7'        : [],
-        'O1'        : [],
-        'O2'        : [],
-        'P8'        : [],
-        'T8'        : [],
-        'F8'        : [],
-        'AF4'       : [],
-        'FC6'       : [],
-        'F4'        : []
-    }
-    # output.write("SECOND,COUNTER,F3,FC5,AF3,F7,T7,P7,O1,O2,P8,T8,F8,AF4,FC6,F4,GYRO_X,GYRO_Y\n")
+    data        = initBuffer()
 
     second      = 0
     iterate     = 0
@@ -46,7 +31,7 @@ if __name__ == "__main__":
 
             if (second % (measure_time + idle_time) <= (measure_time - 1) ) :
                 data['second'].append(second)
-                data['counter'].append(packet.counter)
+                data['counter'].append(iterate)
                 data['F3'].append(packet.F3[0])
                 data['FC5'].append(packet.FC5[0])
                 data['AF3'].append(packet.AF3[0])
@@ -62,12 +47,14 @@ if __name__ == "__main__":
                 data['FC6'].append(packet.FC6[0])
                 data['F4'].append(packet.F4[0])
             elif (iterate == (sampling_rate - 1)) :
-                print data
+                print data['O1']
+                print data['O2']
 
             iterate += 1
             if (iterate == sampling_rate) :
                 iterate = 0
                 second  += 1
+                if (second % (measure_time + idle_time) == 0 ) : data = initBuffer()
 
             gevent.sleep(0)
 
